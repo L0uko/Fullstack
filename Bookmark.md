@@ -1,1 +1,1 @@
-Tällä hetkellä opiskellaan part 1 C Muutos
+Tällä hetkellä opiskellaan part 1 d Muutos
