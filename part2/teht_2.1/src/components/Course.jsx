@@ -26,10 +26,30 @@ const Course = (props) => {
       </p>
     );
   };
+  const Sum = (props) => {
+    const courses = props.course.parts;
+
+    const totalamount = courses.reduce(function (sum, course) {
+      return sum + course.exercises;
+    }, 0);
+
+    return (
+      <div>
+        <p>
+          <b>total of {totalamount} exercises</b>
+        </p>
+      </div>
+    );
+  };
   return (
     <div>
-      <Header course={course} />
-      <Content course={course} />
+      {course.map((course) => (
+        <div key={course.id}>
+          <Header course={course} />
+          <Content course={course} />
+          <Sum course={course} />
+        </div>
+      ))}
     </div>
   );
 };
