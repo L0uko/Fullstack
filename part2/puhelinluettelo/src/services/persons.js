@@ -13,10 +13,19 @@ const create = (newPerson) => {
   return request.then((response) => response.data);
 };
 
+const update = (personId, updatedPerson) => {
+  const url = `${baseUrl}/${personId}`;
+  console.log(`url = ${url}, updated person = ${updatedPerson}`);
+  const request = axios.put(url, updatedPerson).catch((error) => {
+    console.log("fail");
+  });
+  return request.then((response) => response.data);
+};
+
 const remove = (personId) => {
   const url = `${baseUrl}/${personId}`;
   console.log("url is ", url);
   return axios.delete(url);
 };
 
-export default { getAll, create, remove };
+export default { getAll, create, update, remove };

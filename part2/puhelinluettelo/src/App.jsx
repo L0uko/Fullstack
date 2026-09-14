@@ -23,12 +23,27 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    const nameOnList = persons.some((person) => person.name === newName);
+    const nameOnList = persons.find(({ name }) => name === nameObject.name);
+    console.log("nameonlist = ", nameOnList);
 
     if (nameOnList) {
-      alert(`${newName} is already added to phonebook`);
+      const replaceNumber = window.confirm(
+        `${newName} is already added to phonebook. Do you want to replace with a new one?`,
+      );
+      if (replaceNumber) {
+        console.log("uusi person", nameOnList);
+        personService
+          .update(nameOnList.id, nameObject)
+          .then((returnedPerson) => {
+            console.log("returned person", returnedPerson);
+            setPersons(
+              persons.map((person) =>
+                person.id !== returnedPerson.id ? person : returnedPerson,
+              ),
+            );
+          });
+      }
     } else {
-      console.log("postattava objekti = ", nameObject);
       personService.create(nameObject).then((newPerson) => {
         setPersons(persons.concat(newPerson));
       });
