@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "./index.css";
+import Notification from "./components/Notification";
 import personService from "./services/persons";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
@@ -10,7 +12,9 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
-
+  const [newNotification, setNewNotification] = useState(
+    "Positive notification",
+  );
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
       setPersons(initialPersons);
@@ -42,6 +46,7 @@ const App = () => {
               ),
             );
           });
+        setNewNotification(`${nameObject.name}'s number has been changed.`);
       }
     } else {
       personService.create(nameObject).then((newPerson) => {
@@ -49,6 +54,10 @@ const App = () => {
       });
       setNewName("");
       setNewNumber("");
+      setNewNotification(`${nameObject.name} has been added to the phonebook.`);
+      setTimeout(() => {
+        setNewNotification(null);
+      }, 5000);
     }
   };
 
@@ -59,6 +68,7 @@ const App = () => {
       personService.remove(person.id).then(() => {
         setPersons(persons.filter((n) => n.id !== person.id));
       });
+      setNewNotification(`${person.name} has been removed from the phonebook.`);
     }
   };
 
@@ -81,6 +91,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={newNotification} />
       <form>
         <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
       </form>
