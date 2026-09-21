@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
 
@@ -6,6 +7,10 @@ const app = express();
 const dbPath = path.join(__dirname, "db.json");
 
 app.use(express.json());
+morgan.token("body", (request) => JSON.stringify(request.body));
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body"),
+);
 
 const readPersons = () => {
   const database = JSON.parse(fs.readFileSync(dbPath, "utf8"));
