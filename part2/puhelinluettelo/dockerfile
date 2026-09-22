@@ -1,0 +1,26 @@
+
+
+FROM node:25-alpine AS frontend-build
+
+WORKDIR /usr/src/app/frontend
+
+COPY frontend/package*.json ./
+RUN npm install
+
+COPY frontend/ .
+
+RUN npm run build
+
+
+FROM node:25-alpine
+WORKDIR /usr/src/app
+
+COPY backend/package*.json ./
+RUN npm install --omit=dev
+
+COPY backend/ .
+
+COPY --from=frontend-build /usr/src/app/frontend/dist ./build/dist
+
+EXPOSE 3001
+CMD ["npm", "start"]

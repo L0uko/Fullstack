@@ -7,10 +7,14 @@ const app = express();
 const dbPath = path.join(__dirname, "db.json");
 
 app.use(express.json());
+<<<<<<< HEAD
 morgan.token("body", (request) => JSON.stringify(request.body));
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body"),
 );
+=======
+app.use(express.static("dist"));
+>>>>>>> 3fb5125 (teht 3.18 done)
 
 const readPersons = () => {
   const database = JSON.parse(fs.readFileSync(dbPath, "utf8"));

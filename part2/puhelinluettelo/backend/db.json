@@ -21,30 +21,23 @@
       "id": "4"
     },
     {
-      "content": "Postman is guud trust me",
-      "important": true
-    },
-    {},
-    {
-      "content": "Postman is guud trust me",
-      "important": true
-    },
-    {
-      "name": "Matti Paavo",
-      "number": "676769"
-    },
-    {
       "name": "Nelli",
       "number": "12341566",
       "id": "616"
     },
     {
+<<<<<<< HEAD
       "id": "206"
     },
     {
       "name": "Mattinson Paavo",
       "number": "676769",
       "id": "98"
+=======
+      "name": "asd",
+      "number": "081234",
+      "id": "721"
+>>>>>>> 3fb5125 (teht 3.18 done)
     }
   ]
 }
