@@ -7,24 +7,38 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2];
 
-const url = `mongodb+srv://toukottoivonen_db_user:@cluster0.blhpok2.mongodb.net/?appName=Cluster0retryWrites=true&w=majority&appName=Cluster0`;
+const url = `mongodb+srv://toukottoivonen_db_user:${password}@cluster0.blhpok2.mongodb.net/?appName=Cluster0retryWrites=true&w=majority`;
 
 mongoose.set("strictQuery", false);
 mongoose.connect(url, { family: 4 });
 
 const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
+  name: String,
+  number: String,
 });
 
 const Note = mongoose.model("Note", noteSchema);
 
-const note = new Note({
-  content: "HTML is easy",
-  important: true,
-});
+const name = process.argv[3];
+const number = process.argv[4];
 
-note.save().then((result) => {
-  console.log("note saved!");
-  mongoose.connection.close();
+const note = new Note({
+  name: name,
+  number: number,
 });
+if (process.argv.length === 3) {
+  Note.find({}).then((result) => {
+    result.forEach((note) => {
+      console.log(note.name, note.number);
+    });
+    mongoose.connection.close();
+  });
+} else if (process.argv.length === 5) {
+  note.save().then((result) => {
+    console.log(`Added ${name} number ${number} to phonebook!`);
+    mongoose.connection.close();
+  });
+} else {
+  console.log("invalid argument");
+  mongoose.connection.close();
+}
