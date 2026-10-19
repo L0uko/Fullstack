@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 // ÄLÄ KOSKAAN TALLETA SALASANOJA GitHubiin!
-const password = process.argv[2];
 const url = process.env.MONGODB_URI;
 
 mongoose.set("strictQuery", false);
