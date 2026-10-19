@@ -1,17 +1,23 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
+const Note = require("./models/persons");
 
 const app = express();
 const dbPath = path.join(__dirname, "db.json");
-
 app.use(express.json());
 morgan.token("body", (request) => JSON.stringify(request.body));
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body"),
 );
 
+app.get("/api/persons", (request, response) => {
+  Note.find({}).then((notes) => {
+    response.json(notes);
+  });
+});
 const readPersons = () => {
   const database = JSON.parse(fs.readFileSync(dbPath, "utf8"));
   return database.persons;
@@ -28,41 +34,26 @@ app.get("/info", (request, response) => {
   `);
 });
 
-app.get("/api/persons", (request, response) => {
-  response.json(readPersons());
-});
-
 app.get("/api/persons/:id", (request, response) => {
-  const person = readPersons().find(
-    (person) => person.id === request.params.id,
-  );
-
-  person ? response.json(person) : response.status(404).end();
+  Note.findById(request.params.id).then((note) => {
+    response.json(note);
+  });
 });
 
 app.post("/api/persons", (request, response) => {
-  const persons = readPersons();
-  const { name, number } = request.body;
-
-  if (!name || !number) {
-    return response.status(400).json({
-      error: "name and number are required",
-    });
+  const body = request.body;
+  console.log(body);
+  if (!body.name || !body.number) {
+    return response.status(400).json({ error: "name or number missing" });
   }
 
-  if (persons.some((person) => person.name === name)) {
-    return response.status(400).json({
-      error: "name must be unique",
-    });
-  }
-
-  const person = {
-    ...request.body,
-    id: String(Math.floor(Math.random() * 999) + 1),
-  };
-
-  writePersons([...persons, person]);
-  response.status(201).json(person);
+  const person = new Note({
+    name: body.name,
+    number: body.number,
+  });
+  person.save().then((savedNote) => {
+    response.json(savedNote);
+  });
 });
 
 app.delete("/api/persons/:id", (request, response) => {
@@ -75,7 +66,7 @@ app.delete("/api/persons/:id", (request, response) => {
   response.status(204).end();
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
