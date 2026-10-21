@@ -1,5 +1,6 @@
 services:
   puhelinluettelo:
+    image: l0uko/puhelinluettelo_fullstack:latest
     build:
       context: .
       dockerfile: dockerfile
