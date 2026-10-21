@@ -44,19 +44,27 @@ const App = () => {
                 person.id !== returnedPerson.id ? person : returnedPerson,
               ),
             );
+            setNewNotification(`${nameObject.name}'s number has been changed.`);
+          })
+          .catch((error) => {
+            setNewNotification(error.response?.data?.error || "Validation failed.");
           });
-        setNewNotification(`${nameObject.name}'s number has been changed.`);
       }
     } else {
-      personService.create(nameObject).then((newPerson) => {
-        setPersons(persons.concat(newPerson));
-      });
-      setNewName("");
-      setNewNumber("");
-      setNewNotification(`${nameObject.name} has been added to the phonebook.`);
-      setTimeout(() => {
-        setNewNotification(null);
-      }, 5000);
+      personService
+        .create(nameObject)
+        .then((newPerson) => {
+          setPersons(persons.concat(newPerson));
+          setNewName("");
+          setNewNumber("");
+          setNewNotification(`${nameObject.name} has been added to the phonebook.`);
+          setTimeout(() => {
+            setNewNotification(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          setNewNotification(error.response?.data?.error || "Validation failed.");
+        });
     }
   };
 

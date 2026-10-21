@@ -16,9 +16,7 @@ const create = (newPerson) => {
 const update = (personId, updatedPerson) => {
   const url = `${baseUrl}/${personId}`;
   console.log(`url = ${url}, updated person = ${updatedPerson}`);
-  const request = axios.put(url, updatedPerson).catch((error) => {
-    console.log("fail");
-  });
+  const request = axios.put(url, updatedPerson);
   return request.then((response) => response.data);
 };
 
